@@ -54,11 +54,16 @@
     <Compile Include="Circuit.cs" />
     <Compile Include="Input\Parser.cs" />
     <Compile Include="Input\Parser_Test.cs" />
+    <Compile Include="PeCalc\Calc_Test.cs" />
+    <Compile Include="PeCalc\Gate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="cars.txt" />
+    <Content Include="simple.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="sample.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
