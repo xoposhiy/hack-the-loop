@@ -49,7 +49,7 @@ namespace CircuitCalc.PeCalc
 			return res;
 		}
 
-		public int[][] ll = new[] {new []{0, 2, 1}, new[] {1,2,2}, new[]{2,1,0} };
+		public int[][] ll = new[] {new []{0, 2, 1}, new[] {1,0,2}, new[]{2,1,0} };
 		
 		public int L(int leftIn, int rightIn)
 		{
