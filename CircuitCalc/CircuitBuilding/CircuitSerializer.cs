@@ -3,7 +3,7 @@ using System.Text;
 
 namespace CircuitCalc.CircuitBuilding
 {
-	class CircuitSerializer
+	public class CircuitSerializer
 	{
 		//элементы primitives кодируют последовательность базовых примитивов H0, H1, H2
 		public string Serialize(byte[] primitives)
