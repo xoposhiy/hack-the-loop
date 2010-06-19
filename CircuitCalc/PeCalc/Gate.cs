@@ -70,26 +70,34 @@ namespace CircuitCalc.PeCalc
 
 	class Calculator : ISink
 	{
-		private readonly string input;
 		public Dictionary<int, Gate> gates = new Dictionary<int, Gate>();
 		public IList<BackWire> backwires = new List<BackWire>();
-		private int position;
 		private Action<int> pushChar;
+		private static string output = "";
 
-		public Calculator(string filename, string input)
+		public Calculator(string filename)
 		{
-			this.input = input;
 			new Parser().Parse(filename, this);
 		}
 
-		public void PushNext()
+		public Calculator(string[] scheme)
+		{
+			new Parser().Parse(scheme, this);
+		}
+
+		public string PushString(string input)
+		{
+			output = "";
+			foreach(var ch in input) PushNext(ch);
+			return output;
+		}
+
+		public void PushNext(char ch)
 		{
 			foreach(var gate in gates.Values)
 				gate.NextStep();
 			foreach(var backWire in backwires)
 				backWire.NextStep();
-			int ch = (position >= input.Length ? '0' : input[position++]) - '0';
-			//Console.WriteLine("input gives " + ch);
 			pushChar(ch);
 		}
 
@@ -98,7 +106,7 @@ namespace CircuitCalc.PeCalc
 			Action<int> theIn = GetTheIn(leftOut, gateIndex);
 			GetGate(gateIndex).SetOut('L', theIn);
 
-			theIn = GetTheIn(rightIn, gateIndex);
+			theIn = GetTheIn(rightOut, gateIndex);
 			GetGate(gateIndex).SetOut('R', theIn);
 		}
 
@@ -138,7 +146,9 @@ namespace CircuitCalc.PeCalc
 
 		private static void OutputChar(int ch)
 		{
-			Console.Write(ch);
+			var c = (char) ('0' + ch);
+			Console.Write(c);
+			output = output + c;
 		}
 	}
 

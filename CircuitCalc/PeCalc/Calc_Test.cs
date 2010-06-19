@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 
 namespace CircuitCalc.PeCalc
@@ -12,8 +9,14 @@ namespace CircuitCalc.PeCalc
 		[Test]
 		public void TestCase()
 		{
-			var calculator = new Calculator("sample.txt", "0222220210110011");
-			for(int i = 0; i < 17; i++) calculator.PushNext();
+			var calculator = new Calculator("sample.txt");
+			const string sampleIn = "02222220210110011";
+			const string realIn = "02102202202202202";
+			const string sampleRealOut = "10221220002011011";
+			string myOut = calculator.PushString(realIn);
+			Console.WriteLine();
+			Console.WriteLine(sampleRealOut);
+			Console.WriteLine(myOut);
 		}
 	}
 }
