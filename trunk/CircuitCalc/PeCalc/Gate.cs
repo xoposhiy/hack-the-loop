@@ -45,17 +45,15 @@ namespace CircuitCalc.PeCalc
 		public int R(int leftIn, int rightIn)
 		{
 			int res = (2 + (leftIn * rightIn)) % 3;
-			Console.WriteLine("R({0}, {1}) = {2}", leftIn, rightIn, res);
 			return res;
 		}
+
 
 		public int[][] ll = new[] {new []{0, 2, 1}, new[] {1,0,2}, new[]{2,1,0} };
 		
 		public int L(int leftIn, int rightIn)
 		{
-			int res = ll[leftIn][rightIn];
-			//int res = (leftIn * (1 + rightIn + rightIn * rightIn) + 2 * rightIn) % 3;
-			Console.WriteLine("L({0}, {1}) = {2}", leftIn, rightIn, res);
+			int res = (leftIn + 2 * rightIn) % 3;
 			return res;
 		}
 
