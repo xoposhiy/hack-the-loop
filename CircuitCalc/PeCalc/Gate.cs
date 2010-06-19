@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using CircuitCalc.Input;
 
 namespace CircuitCalc.PeCalc
@@ -10,12 +11,14 @@ namespace CircuitCalc.PeCalc
 		{
 			lin = c =>
 			      	{
-			      		fromL = c;
+			      		if(c < 0 || c > 2) throw new Exception(c.ToString());
+						fromL = c;
 			      		TryPush();
 			      	};
 			rin = c =>
 			       	{
-			       		fromR = c;
+						if(c < 0 || c > 2) throw new Exception(c.ToString());
+						fromR = c;
 			       		TryPush();
 			       	};
 		}
@@ -42,14 +45,17 @@ namespace CircuitCalc.PeCalc
 		public int R(int leftIn, int rightIn)
 		{
 			int res = (2 + (leftIn * rightIn)) % 3;
-			//Console.WriteLine("R({0}, {1}) = {2}", leftIn, rightIn, res);
+			Console.WriteLine("R({0}, {1}) = {2}", leftIn, rightIn, res);
 			return res;
 		}
 
+		public int[][] ll = new[] {new []{0, 2, 1}, new[] {1,2,2}, new[]{2,1,0} };
+		
 		public int L(int leftIn, int rightIn)
 		{
-			int res = (leftIn * (1 + rightIn + rightIn * rightIn) + 2 * rightIn) % 3;
-			//Console.WriteLine("L({0}, {1}) = {2}", leftIn, rightIn, res);
+			int res = ll[leftIn][rightIn];
+			//int res = (leftIn * (1 + rightIn + rightIn * rightIn) + 2 * rightIn) % 3;
+			Console.WriteLine("L({0}, {1}) = {2}", leftIn, rightIn, res);
 			return res;
 		}
 
@@ -98,7 +104,7 @@ namespace CircuitCalc.PeCalc
 				gate.NextStep();
 			foreach(var backWire in backwires)
 				backWire.NextStep();
-			pushChar(ch);
+			pushChar(ch - '0');
 		}
 
 		public void OnGate(int gateIndex, Point leftIn, Point rightIn, Point leftOut, Point rightOut)
@@ -147,7 +153,7 @@ namespace CircuitCalc.PeCalc
 		private static void OutputChar(int ch)
 		{
 			var c = (char) ('0' + ch);
-			Console.Write(c);
+//			Console.Write(c);
 			output = output + c;
 		}
 	}
