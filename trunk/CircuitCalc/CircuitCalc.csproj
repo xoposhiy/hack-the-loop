@@ -54,6 +54,7 @@
     <Compile Include="AkCalc\Circuit.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CircuitBuilding\Builder.cs" />
     <Compile Include="FindTheInput\FindInput_Test.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Parser_Test.cs" />
