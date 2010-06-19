@@ -29,11 +29,11 @@ namespace CircuitCalc.FindTheInput
 		[Test]
 		public void Simple2()
 		{
-			string input = "012021";
+			string input = "01202101210201202";
 			string res = new Calculator("simple2.txt").PushString(input);
 			Console.WriteLine("{0} -> {1}", input, res);
 		}
-
+		//01202101210201202
 		[Test]
 		public void TestCase()
 		{
@@ -64,9 +64,9 @@ namespace CircuitCalc.FindTheInput
 		private readonly Fact[] facts = new[]
 			{
 				new Fact("simple.txt",  "02120112100002120"), 
-				new Fact("simple2.txt", "01210221200001210"), 
-//				new Fact("simple3.txt", "22022022022022022"), 
-				//new Fact("sample.txt", "10221220002011011"), 
+				new Fact("simple2.txt", "01210221200001210"),
+				new Fact("simple3.txt", "22022022022022022"), 
+				new Fact("sample.txt", "10221220002011011"), 
 			};
 
 		private bool Try(string input)
