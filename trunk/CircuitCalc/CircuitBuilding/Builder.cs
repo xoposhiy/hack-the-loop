@@ -4,7 +4,7 @@ using CircuitCalc.PeCalc;
 
 namespace CircuitCalc.CircuitBuilding
 {
-	class Builder
+	public class Builder
 	{
 		private readonly byte[,] o_kt;
 		private readonly byte[] o_t0;
