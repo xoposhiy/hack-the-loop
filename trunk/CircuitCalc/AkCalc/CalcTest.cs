@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using CircuitCalc.PeCalc;
+using NUnit.Framework;
 
-namespace CircuitCalc
+namespace CircuitCalc.AkCalc
 {
 	[TestFixture]
 	public class CalcTest
