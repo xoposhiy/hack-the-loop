@@ -13,8 +13,8 @@ namespace CircuitCalc.CircuitBuilding
 		[Test]
 		public void H1()
 		{
-			//var bytes = new Builder("01202101210201202", "11021210112101221").Build();
-			var bytes = new Builder("0", "1").Build();
+			var bytes = new Builder("01202101210201202", "11021210112101221").Build();
+			//var bytes = new Builder("0", "1").Build();
 			foreach (var b in bytes)
 			{
 				Console.Write(b + " ");
