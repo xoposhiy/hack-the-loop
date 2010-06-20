@@ -10,12 +10,39 @@ namespace WebClient
 	{
 		static void Main(string[] args)
 		{
-			var sessionId = string.Empty;
-			if (args.Length > 0) sessionId = args[0];
+			if (args.Length == 0)
+			{
+				Console.WriteLine("Need session ID!");
+				return;
+			}
+			string sessionId = args[0];
 			var c = new WebClient(sessionId);
-			var error = c.SubmitFuel("2416", fuel);
-			Console.WriteLine(error);
-			GetCars(c);
+			MainImpl(c);
+		}
+
+		private static void MainImpl(WebClient client)
+		{
+			//var error = client.SubmitFuel("2416", fuel);
+			//Console.WriteLine(error);
+			
+			//GetCars(client);
+
+			SubmitFuelForEachCar(client, fuel);
+		}
+
+		private static void SubmitFuelForEachCar(WebClient client, string factory)
+		{
+			var cars = client.GetCarIdsList();
+			var sb = new StringBuilder();
+			foreach (var car in cars.OrderBy(c => int.Parse(c)))
+			{
+				var response = client.SubmitFuel(car, factory);
+				sb.AppendLine(car);
+				sb.AppendLine(response.ToString());
+				sb.AppendLine("====");
+				sb.AppendLine();
+			}
+			File.WriteAllText(string.Format("bf-fuel-submit.txt"), sb.ToString());
 		}
 
 		private static void GetCars(WebClient c)

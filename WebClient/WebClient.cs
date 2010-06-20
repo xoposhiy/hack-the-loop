@@ -14,10 +14,16 @@ namespace WebClient
 			this.sessionId = string.IsNullOrEmpty(sessionId) ? Login() : sessionId;
 		}
 
-		public Dictionary<string, string> GetCarsList()
+		public IEnumerable<string> GetCarIdsList()
 		{
 			var response = GetResponse(getCarsList);
 			var carIds = HtmlParser.ParseCarsList(response);
+			return carIds;
+		}
+
+		public Dictionary<string, string> GetCarsList()
+		{
+			var carIds = GetCarIdsList();
 			var cars = new Dictionary<string, string>();
 			foreach (var carId in carIds)
 			{
@@ -30,17 +36,17 @@ namespace WebClient
 		public string GetCar(string carId)
 		{
 			var response = GetResponse(string.Format(getCar, carId));
-			//File.WriteAllText(string.Format("car-{0}.txt", carId), response);
+			//File.WriteAllText(string.Format("car-{0}.html", carId), response);
 			var car = HtmlParser.ParseCar(response);
 			return car;
 		}
 
-		public string SubmitFuel(string carId, string factory)
+		public SubmitFuelResponse SubmitFuel(string carId, string factory)
 		{
 			var response = Post(string.Format(submitFuel, carId), Escape(factory));
-			File.WriteAllText(string.Format("submit-fuel-for-car-{0}.txt", carId), response);
-			var error = HtmlParser.ParseSubmitFuelResponse(response);
-			return error;
+			File.WriteAllText(string.Format("submit-fuel-for-car-{0}.html", carId), response);
+			var result = HtmlParser.ParseSubmitFuelResponse(response);
+			return result;
 		}
 
 		private static string Escape(string factory)
@@ -75,9 +81,9 @@ namespace WebClient
 			}
 			using (var resp = req.GetResponse())
 			{
-				var setCookie = resp.Headers["Set-Cookie"];
-				Debug.Assert(setCookie.StartsWith("JSESSIONID="));
-				return setCookie.Split(new[] {';'})[0].Split(new[] {'='})[1];
+				var cookie = resp.Headers["Set-Cookie"];
+				Debug.Assert(cookie.StartsWith("JSESSIONID="));
+				return cookie.Split(new[] {';'})[0].Split(new[] {'='})[1];
 			}
 		}
 
