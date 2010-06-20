@@ -17,11 +17,11 @@ namespace WebClientNS
 				return;
 			}
 			string sessionId = args[0];
-			var c = new WebClient(sessionId);
+			var c = new CircuitCalc.WebClient.WebClient(sessionId);
 			MainImpl(c);
 		}
 
-		private static void MainImpl(WebClient client)
+		private static void MainImpl(CircuitCalc.WebClient.WebClient client)
 		{
 			//var error = client.SubmitFuel("2416", fuel);
 			//Console.WriteLine(error);
@@ -31,7 +31,7 @@ namespace WebClientNS
 			SubmitFuelForEachCar(client, fuel);
 		}
 
-		private static void SubmitFuelForEachCar(WebClient client, string factory)
+		private static void SubmitFuelForEachCar(CircuitCalc.WebClient.WebClient client, string factory)
 		{
 			var cars = client.GetCarIdsList();
 			var sb = new StringBuilder();
@@ -47,7 +47,7 @@ namespace WebClientNS
 			File.WriteAllText(string.Format("bf-fuel-submit.txt"), sb.ToString());
 		}
 
-		private static void GetCars(WebClient c)
+		private static void GetCars(CircuitCalc.WebClient.WebClient c)
 		{
 			var cars = c.GetCarsList();
 			PrintCars(cars);
