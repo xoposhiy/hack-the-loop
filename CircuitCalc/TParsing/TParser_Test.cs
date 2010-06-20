@@ -10,12 +10,20 @@ namespace CircuitCalc.TParsing
 	public class TParser_Test
 	{
 		[Test]
-		public void TestCase()
+		public void ParseCar()
 		{
-			var chambers = new TParser().ParseChambers(new TStream("122000010"));
-			foreach(var chamber in chambers)
+			Console.WriteLine(new TParser().ParseNumber(new TStream("22022")));
+			var chambers = new TParser().ParseChambers(new TStream("12200010112"));
+			foreach(var chamber in chambers) Console.WriteLine(chamber);
+		}
+		[Test]
+		public void ParseFuel()
+		{
+			var ms = new TParser().ParseFuel(new TStream("11110"));
+			foreach(var m in ms)
 			{
-				Console.WriteLine(chamber);
+				Console.WriteLine(m.ToString());
+				Console.WriteLine();
 			}
 		}
 	}
