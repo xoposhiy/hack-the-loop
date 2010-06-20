@@ -12,6 +12,13 @@ namespace CircuitCalc
 				Console.WriteLine(chamber.ToString());
 			}
 		}
+		public static void Print(this Matrix[] fuel)
+		{
+			foreach(var m in fuel)
+			{
+				Console.WriteLine(m.ToString());
+			}
+		}
 
 	}
 }

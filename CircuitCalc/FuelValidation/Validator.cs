@@ -17,6 +17,11 @@ namespace CircuitCalc.FuelValidation
 		public bool FuelFitsCar(Chamber[] car, string encodedFuel)
 		{
 			var fuel = parser.ParseFuel(new TStream(encodedFuel));
+			return FuelFitsCar(car, fuel);
+		}
+		
+		public bool FuelFitsCar(Chamber[] car, Matrix[] fuel)
+		{
 			return car.All(chamber => ChamberWorks(chamber, fuel));
 		}
 
@@ -67,5 +72,6 @@ namespace CircuitCalc.FuelValidation
 						c.items[y][x] += a.items[y][k]*b.items[k][x];
 			return c;
 		}
+
 	}
 }
