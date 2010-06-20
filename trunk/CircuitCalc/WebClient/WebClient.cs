@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace WebClient
+namespace CircuitCalc.WebClient
 {
 	public class WebClient
 	{

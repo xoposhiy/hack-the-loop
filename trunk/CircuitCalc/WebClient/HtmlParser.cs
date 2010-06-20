@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace WebClient
+namespace CircuitCalc.WebClient
 {
-	static class HtmlParser
+	public static class HtmlParser
 	{
 		public static IEnumerable<string> ParseCarsList(string response)
 		{
