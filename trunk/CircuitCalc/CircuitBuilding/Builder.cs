@@ -14,6 +14,11 @@ namespace CircuitCalc.CircuitBuilding
 		{
 			return new CircuitSerializer().Serialize(new Builder(input, wantedOutput).Build());
 		}
+		
+		public static string BuildFactory(string encodedFuel)
+		{
+			return Build(Consts.serverInput, Consts.keyPrefix + encodedFuel);
+		}
 
 		public Builder(string input, string wantedOutput)
 		{

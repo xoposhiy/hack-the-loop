@@ -12,7 +12,7 @@ namespace CircuitCalc.TParsing
 		public int pos;
 
 		public TStream(string input)
-		:this(input.GetEnumerator())
+			:this(input.Replace(" ", "").GetEnumerator())
 		{
 			
 		}
@@ -131,43 +131,6 @@ namespace CircuitCalc.TParsing
 		private int ParseDigit(TStream s)
 		{
 			return s.Next() - '0';
-		}
-	}
-
-	public class Matrix
-	{
-		public int height, width;
-		public readonly int[][] items;
-
-		public Matrix(int[][] items)
-		{
-			this.items = items;
-			height = items.Length;
-			if(height == 0) width = 0;
-			else width = items[0].Length;
-		}
-
-		public Matrix(int height, int width)
-		{
-			this.height = height;
-			this.width = width;
-			items = new int[height][];
-			for(int y=0; y<height; y++)
-				items[y] = new int[width];
-		}
-
-		public override string ToString()
-		{
-			var b = new StringBuilder();
-			for(int y=0; y<height; y++)
-			{
-				for(int x = 0; x < width; x++)
-				{
-					b.Append(" " + items[y][x]);
-				}
-				b.AppendLine();
-			}
-			return b.ToString();
 		}
 	}
 
