@@ -158,8 +158,15 @@ namespace Editor
                 string result = "";
                 for(int i = 0; i < list.Length; ++i)
                 {
-                    int num = int.Parse(list[i]);
-                    result += GetNumber(num);
+                    try
+                    {
+                        int num = int.Parse(list[i]);
+                        result += GetNumber(num);
+                    }
+                    catch
+                    {
+                        result += "<err>";
+                    }
                 }
                 return result;
             }
