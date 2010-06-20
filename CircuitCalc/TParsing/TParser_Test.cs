@@ -14,10 +14,10 @@ namespace CircuitCalc.TParsing
 		[Test]
 		public void ParseStuff()
 		{
-			parser.ParseFuel(new TStream("1211222111")); 
-			foreach(var i in parser.ParseList<int>(new TStream("11021210112101221"), parser.ParseNumber))
+			var matrices = parser.ParseFuel(new TStream("22011111110"));
+			foreach(var m in matrices)
 			{
-				Console.Write(i + " ");
+				Console.Write(m.ToString());
 			}
 			Console.WriteLine();
 		}

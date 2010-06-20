@@ -9,6 +9,7 @@ namespace CircuitCalc.TParsing
 	{
 		private IEnumerator<char> e;
 		private bool hasNext;
+		public int pos;
 
 		public TStream(string input)
 		:this(input.GetEnumerator())
@@ -19,6 +20,7 @@ namespace CircuitCalc.TParsing
 		{
 			this.e = e;
 			hasNext = e.MoveNext();
+			pos++;
 		}
 
 		public bool HasNext()
@@ -35,6 +37,7 @@ namespace CircuitCalc.TParsing
 			}finally
 			{
 				hasNext = e.MoveNext();
+				pos++;
 			}
 		}
 	}
@@ -61,6 +64,11 @@ namespace CircuitCalc.TParsing
 			return new Matrix(ParseList(s, ss => ParseList<int>(ss, ParseNumber)));
 		}
 
+		public Chamber[] ParseCar(string s)
+		{
+			return ParseChambers(new TStream(s));
+		}
+
 		public Chamber[] ParseChambers(TStream s)
 		{
 			Chamber[] chs = ParseList<Chamber>(s, ParseChamber);
@@ -81,14 +89,17 @@ namespace CircuitCalc.TParsing
 			var c = s.Next();
 			if (c == '0') return new T[0];
 			if (c == '1') return new []{parse(s)};
-			if(c == '2') return ParseElements(s, parse);
+			if(c == '2')
+			{
+				return ParseElements(s, parse);
+			}
 			throw new Exception("unknown c: " + c);
 		}
 
 		private T[] ParseElements<T>(TStream s, Func<TStream, T> parse)
 		{
 			var c = s.Next();
-			if(c != '2') throw new Exception("2 expected. was: " + c);
+			if(c != '2') throw new Exception("2 expected. was: " + c + " pos: " + s.pos);
 			var len = ParseNumber(s) + 2;
 			var res = new T[len];
 			for(int i=0; i<len; i++)
@@ -136,6 +147,15 @@ namespace CircuitCalc.TParsing
 			else width = items[0].Length;
 		}
 
+		public Matrix(int height, int width)
+		{
+			this.height = height;
+			this.width = width;
+			items = new int[height][];
+			for(int y=0; y<height; y++)
+				items[y] = new int[width];
+		}
+
 		public override string ToString()
 		{
 			var b = new StringBuilder();
@@ -156,6 +176,12 @@ namespace CircuitCalc.TParsing
 		public bool isMaster;
 		public int[] upper;
 		public int[] lower;
+
+		public int[] AllTanks()
+		{
+			return upper.Concat(lower).ToArray();
+		}
+
 		public override string ToString()
 		{
 			var sb = new StringBuilder("Chamber[" + isMaster + ", ");

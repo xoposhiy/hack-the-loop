@@ -57,10 +57,14 @@
     <Compile Include="AkCalc\Circuit.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CarExtensions.cs" />
+    <Compile Include="CarsRepo.cs" />
     <Compile Include="CircuitBuilding\Builder.cs" />
     <Compile Include="CircuitBuilding\Builder_Test.cs" />
     <Compile Include="CircuitBuilding\CircuitSerializer.cs" />
     <Compile Include="FindTheInput\FindInput_Test.cs" />
+    <Compile Include="FuelValidation\Validator.cs" />
+    <Compile Include="FuelValidation\Validator_Test.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Parser_Test.cs" />
     <Compile Include="PeCalc\Calc_Test.cs" />
