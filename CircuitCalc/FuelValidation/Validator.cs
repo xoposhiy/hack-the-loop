@@ -22,6 +22,9 @@ namespace CircuitCalc.FuelValidation
 		
 		public bool FuelFitsCar(Chamber[] car, Matrix[] fuel)
 		{
+			var numberOfTanks = car.Length == 0 ? 0 : car.Max(ch => ch.TanksCount());
+			if (fuel.Length < numberOfTanks)
+				return false;
 			return car.All(chamber => ChamberWorks(chamber, fuel));
 		}
 

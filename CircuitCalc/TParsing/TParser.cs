@@ -145,6 +145,11 @@ namespace CircuitCalc.TParsing
 			return upper.Concat(lower).ToArray();
 		}
 
+		public int TanksCount()
+		{
+			return AllTanks().Count() == 0 ? 0 : AllTanks().Max() + 1;
+		}
+
 		public override string ToString()
 		{
 			var sb = new StringBuilder("Chamber[" + isMaster + ", ");
