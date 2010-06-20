@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{852F94B0-E46E-4538-8954-3931E394C6C3}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -74,6 +74,8 @@
     <Compile Include="TParsing\TParser.cs" />
     <Compile Include="TParsing\TParser_Test.cs" />
     <Compile Include="Trit.cs" />
+    <Compile Include="WebClient\HtmlParser.cs" />
+    <Compile Include="WebClient\WebClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="cars.txt" />

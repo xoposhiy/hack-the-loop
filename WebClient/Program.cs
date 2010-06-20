@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Linq;
+using CircuitCalc.WebClient;
 
-namespace WebClient
+namespace WebClientNS
 {
 	class Program
 	{
@@ -38,6 +39,7 @@ namespace WebClient
 			{
 				var response = client.SubmitFuel(car, factory);
 				sb.AppendLine(car);
+				sb.AppendLine("====");
 				sb.AppendLine(response.ToString());
 				sb.AppendLine("====");
 				sb.AppendLine();
