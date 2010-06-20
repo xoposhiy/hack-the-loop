@@ -147,7 +147,8 @@ namespace CircuitCalc.TParsing
 
 		public int TanksCount()
 		{
-			return AllTanks().Count() == 0 ? 0 : AllTanks().Max() + 1;
+			var allTanks = AllTanks();
+			return allTanks.Length == 0 ? 0 : allTanks.Max() + 1;
 		}
 
 		public override string ToString()
