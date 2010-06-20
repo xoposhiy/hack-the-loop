@@ -1,15 +1,99 @@
 ﻿using System;
-using System.Diagnostics;
-using NUnit.Framework;
 using System.IO;
-using System.Linq;
+using System.Net;
+using System.Text;
+using CircuitCalc.CircuitBuilding;
+using NUnit.Framework;
 
 namespace CircuitCalc.PeCalc
 {
 	public static class Consts
 	{
 		public const string keyPrefix =   "11021210112101221";
-		public const string serverInput = "0120210121020120210201";
+		//public const string serverInput = "0120210121020120210201";
+		public const string serverInput = "012021012102012021020121012021012102012101202102012021012102012021020121012021020120210121020121012021012102012021020121012021012102012101202";
+		public const string serverInput17 =   "01202101210201202";
+		//0120210121020120210201210120210121020
+	}
+
+	internal class ServerInputFinder
+	{
+		public void Run()
+		{
+			var servInp = Consts.serverInput;
+			for(int i = 0; i < 100; i++)
+			{
+				var factories = new string[3,3];
+				bool[,] responses = FillTable(i, servInp, factories);
+				int x2 = -1, y2 = -1;
+				for(int x = 0; x < 3; x++)
+					for(int y = 0; y < 3; y++)
+					{
+						if(responses[x, y])
+							x2 = x;
+					}
+				if(x2 < 0) throw new Exception();
+				for(int y = 0; y < 3; y++)
+					if(!responses[x2, y]) y2 = y;
+				var f = factories[x2, y2];
+				servInp += FindServInputSuffix(servInp, f);
+				Console.WriteLine("EXTENDED INPUT: " + servInp);
+			}
+		}
+
+		private string FindServInputSuffix(string servInp, string f)
+		{
+			for(char c1 = '0'; c1 <= '2'; c1++)
+			{
+				for(char c2 = '0'; c2 <= '2'; c2++)
+				{
+					var o = Calculator.For(f).PushString(servInp + c1 + c2);
+					if(o.EndsWith("22")) return "" + c1 + c2;
+				}
+			}
+			throw new Exception();
+		}
+
+		private bool[,] FillTable(int i, string servInp, string[,] factories)
+		{
+			var responses = new bool[3,3];
+			for(char c1 = '0'; c1 <= '2'; c1++)
+			{
+				for(char c2 = '0'; c2 <= '2'; c2++)
+				{
+					var factory = Builder.Build(servInp + "00", Consts.keyPrefix + new string('2', 2*i) + c1 + c2);
+					responses[c1 - '0', c2 - '0'] = Send(factory, i*2 + 2);
+					factories[c1 - '0', c2 - '0'] = factory;
+					//throw new Exception("dobreak");
+				}
+			}
+			return responses;
+		}
+
+		private bool Send(string factory, int need2AtIndex)
+		{
+			var webRequest = (HttpWebRequest)WebRequest.Create("http://icfpcontest.org/icfp10/instance/2416/solve");
+			webRequest.CookieContainer = new CookieContainer();
+			webRequest.CookieContainer.Add(new Cookie("JSESSIONID", "1D9490646CB45C19622BD671F2FCACED", "/icfp10", "icfpcontest.org"));
+			webRequest.Method = "POST";
+			webRequest.ContentType = "application/x-www-form-urlencoded";
+			var s = webRequest.GetRequestStream();
+			//Console.WriteLine(factory);
+			var buffer = Encoding.ASCII.GetBytes("contents=" + Escape(factory));
+			s.Write(buffer, 0, buffer.Length);
+			s.Close();
+			var responseStream = webRequest.GetResponse().GetResponseStream();
+			string str = new StreamReader(responseStream).ReadToEnd();
+			//Console.WriteLine(str);
+			responseStream.Close();
+			//if (str.Contains("not connected")) Console.WriteLine("NOT CONNECTED!!!");
+			return str.Contains(string.Format("\"input\" (line 1, column {0}):", need2AtIndex));
+		}
+
+		private string Escape(string factory)
+		{
+			return factory.Replace("\r\n", "%0D%0A").Replace("#", "%23").Replace(",", "%2C").Replace(":", "%3A");
+		}
 	}
 
 
@@ -20,16 +104,21 @@ namespace CircuitCalc.PeCalc
 		private const string keyPrefix = "11021210112101221";
 
 		[Test]
+		public void ExtendServerInput1()
+		{
+			new ServerInputFinder().Run();
+		}
+
+		[Test]
 		public void SubmitFuel1()
 		{
 			var lines = File.ReadAllLines(@"c:\work\icfpc2010\others\tbd\simulator\data\car_data_sorted");
 			foreach(var line in lines)
 			{
 				var parts = line.Split(',');
-				if (parts.Length > 1 && parts[1].Trim().StartsWith("1"))
+				if(parts.Length > 1 && parts[1].Trim().StartsWith("1"))
 				{
 					Console.WriteLine(parts[0].Trim());
-					Process.Start("");
 				}
 			}
 		}
@@ -54,12 +143,12 @@ namespace CircuitCalc.PeCalc
 			Console.WriteLine(myOut);
 		}
 
-        [Test]
-        public void TestXOR ()
-        {
-            var input = "01202101210201202";
-            //Console.WriteLine(new Calculator("simple.txt").PushString(input));
-/*            Console.WriteLine(new Calculator(new []
+		[Test]
+		public void TestXOR()
+		{
+			var input = "01202101210201202";
+			//Console.WriteLine(new Calculator("simple.txt").PushString(input));
+			/*            Console.WriteLine(new Calculator(new []
                                                  {
                                                      "0R:",
                                                      "2LX0#1LX,",
@@ -68,13 +157,13 @@ namespace CircuitCalc.PeCalc
                                                      "0R"
                                                  }).PushString(input));*/
 
-/*            Console.WriteLine(new Calculator(new []
+			/*            Console.WriteLine(new Calculator(new []
                                                              {
                                                                  "0R:2LX0#1LX,0L2R0#2L2R,1L1R0#0L1R:0R"
                                                              }).PushString(input));*/
 
 
-/*            Console.WriteLine(new Calculator(new []
+			/*            Console.WriteLine(new Calculator(new []
                                                  {
                                                     "19L:",
                                                     "12R13R0#1R12R,",
@@ -100,7 +189,7 @@ namespace CircuitCalc.PeCalc
                                                     "19L"
                                                  }).PushString(input));*/
 
-/*            Console.WriteLine(new Calculator(new[]
+			/*            Console.WriteLine(new Calculator(new[]
                                                  {
                                                      "2R:",
                                                      "2L1R0#1L1R,",
@@ -108,7 +197,7 @@ namespace CircuitCalc.PeCalc
                                                      "1LX0#0LX:",
                                                      "2R"
                                                  }).PushString(input));*/
-            /*++
+			/*++
             Console.WriteLine(new Calculator(new[]
                                                  {
                                                      "0L:",
@@ -117,7 +206,7 @@ namespace CircuitCalc.PeCalc
                                                      "1R"
                                                  }).PushString(input));
             --*/
-        }
+		}
 
 		[Test]
 		public void Debug()
@@ -126,47 +215,49 @@ namespace CircuitCalc.PeCalc
 			Console.WriteLine(calculator.PushString("22022022022022022"));
 		}
 
-        [Test]
-        public void Search()
-        {
-            const string input = "01202101210201202";
-            //const string input = "11021210112101221";
-            const string target = "11021210112101221";
-            var files = new string[] { "generated.txt",
-//                                        @"D:\fact4.txt",
-                                        @"D:\fact5.txt"
-                                    };
-            string s;
-            string collect = "";
-            bool any = false;
-            for (int i = 0; i < files.Length; i++)
-            {
-                Console.WriteLine("Parsing " + files[i]);
-                var sr = new StreamReader(files[i]);
-                while ((s = sr.ReadLine()) != null)
-                {
-                    if (s.Length > 0)
-                    {
-                        collect += s + "\n";
-                    }
-                    else
-                    {
-                        collect = collect.Substring(0, collect.Length - 1);
-                        string res = new Calculator(collect.Split('\n')).PushString(input);
-                        if (res == target)
-                        {
-                            any = true;
-                            Console.WriteLine(collect);
-                            Console.WriteLine("-----------------------------------");
-                        }
-                        collect = "";
-                    }
-                }
-            }
-            if(!any)
-            {
-                Console.WriteLine("No factories");
-            }
-        }
+		[Test]
+		public void Search()
+		{
+			const string input = "01202101210201202";
+			//const string input = "11021210112101221";
+			const string target = "11021210112101221";
+			var files = new string[]
+				{
+					"generated.txt",
+					//                                        @"D:\fact4.txt",
+					@"D:\fact5.txt"
+				};
+			string s;
+			string collect = "";
+			bool any = false;
+			for(int i = 0; i < files.Length; i++)
+			{
+				Console.WriteLine("Parsing " + files[i]);
+				var sr = new StreamReader(files[i]);
+				while((s = sr.ReadLine()) != null)
+				{
+					if(s.Length > 0)
+					{
+						collect += s + "\n";
+					}
+					else
+					{
+						collect = collect.Substring(0, collect.Length - 1);
+						string res = new Calculator(collect.Split('\n')).PushString(input);
+						if(res == target)
+						{
+							any = true;
+							Console.WriteLine(collect);
+							Console.WriteLine("-----------------------------------");
+						}
+						collect = "";
+					}
+				}
+			}
+			if(!any)
+			{
+				Console.WriteLine("No factories");
+			}
+		}
 	}
 }

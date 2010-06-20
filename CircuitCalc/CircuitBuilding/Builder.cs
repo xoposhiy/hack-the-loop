@@ -10,6 +10,11 @@ namespace CircuitCalc.CircuitBuilding
 		private readonly byte[] o_t0;
 		private readonly int n;
 
+		public static string Build(string input, string wantedOutput)
+		{
+			return new CircuitSerializer().Serialize(new Builder(input, wantedOutput).Build());
+		}
+
 		public Builder(string input, string wantedOutput)
 		{
 			n = wantedOutput.Length;

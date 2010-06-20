@@ -84,6 +84,11 @@ namespace CircuitCalc.PeCalc
 			new Parser().Parse(filename, this);
 		}
 
+		public static Calculator For(string scheme)
+		{
+			return new Calculator(scheme.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)); 
+		}
+
 		public Calculator(string[] scheme)
 		{
 			new Parser().Parse(scheme, this);
