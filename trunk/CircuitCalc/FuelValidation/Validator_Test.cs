@@ -44,5 +44,31 @@ namespace CircuitCalc.FuelValidation
 			Console.WriteLine("TOTAL: " + c);
 		}
 
+		[Test]
+		public void TestFuelOnAllCars()
+		{
+			int c = 0;
+			foreach (var carId in repo.encodedCars.Keys)
+			{
+				var car = repo.cars[carId];
+				try
+				{
+					if (v.FuelFitsCar(car, "2210221022102200000221002200002210002200022102210120022100120221000122210221011002210011022100011"))
+					{
+						c++;
+						Console.WriteLine(carId);
+						//						car.Print();
+					}
+				}
+				catch
+				{
+					Console.WriteLine(carId);
+					Console.WriteLine(repo.encodedCars[carId]);
+					car.Print();
+					throw;
+				}
+			}
+			Console.WriteLine("TOTAL: " + c);
+		}
 	}
 }
