@@ -24,14 +24,20 @@ namespace CircuitCalc.FuelValidation
 		{
 			Matrix upperOutput = CalculatePipe(chamber.upper, fuel);
 			Matrix lowerOutput = CalculatePipe(chamber.lower, fuel);
-			for(int y = 0; y < upperOutput.height; y++)
+			var enginIn = upperOutput.Sub(lowerOutput);
+			for(int y = 0; y < enginIn.height; y++)
 			{
-				for(int x = 0; x < upperOutput.width; x++)
+				for(int x = 0; x < enginIn.width; x++)
 				{
-					if(upperOutput.items[y][x] < lowerOutput.items[y][x])
+					if(enginIn.items[y][x] < 0)
 						return false;
 				}
-				//TODO Main chamber!
+			}
+			if (chamber.isMaster)
+			{
+				for(int x = 0; x < upperOutput.width; x++)
+					if(enginIn.items[0][x] == 0) return false;
+				
 			}
 			return true;
 		}

@@ -25,7 +25,7 @@ namespace CircuitCalc.TParsing
 		[Test]
 		public void ParseCar()
 		{
-			var chambers = parser.ParseChambers(new TStream("122000010"));
+			var chambers = parser.ParseChambers(new TStream("220 2211 0 10 11 12 0 1 12 2211 0 10 11 12 0 2210 0 10 11"));
 			foreach(var chamber in chambers) Console.WriteLine(chamber);
 		}
 
