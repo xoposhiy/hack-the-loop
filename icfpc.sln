@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FE1FEFA-3B7A-47A4-A909-E32020685098}"
 	ProjectSection(SolutionItems) = preProject
+		Cars.txt = Cars.txt
 		Numbers.txt = Numbers.txt
 	EndProjectSection
 EndProject

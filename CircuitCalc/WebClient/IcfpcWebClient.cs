@@ -6,10 +6,10 @@ using System.Text;
 
 namespace CircuitCalc.WebClient
 {
-	public class WebClient
+	public class IcfpcWebClient
 	{
 		//TODO: login почему-то не фурычит
-		public WebClient(string sessionId)
+		public IcfpcWebClient(string sessionId)
 		{
 			this.sessionId = string.IsNullOrEmpty(sessionId) ? Login() : sessionId;
 		}
