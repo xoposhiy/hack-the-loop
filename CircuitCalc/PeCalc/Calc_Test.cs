@@ -29,7 +29,7 @@ namespace CircuitCalc.PeCalc
 				if (parts.Length > 1 && parts[1].Trim().StartsWith("1"))
 				{
 					Console.WriteLine(parts[0].Trim());
-					Process.Start("")
+					Process.Start("");
 				}
 			}
 		}
