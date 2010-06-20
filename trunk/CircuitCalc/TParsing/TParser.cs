@@ -51,6 +51,16 @@ namespace CircuitCalc.TParsing
 			
 		}
 		
+		public Matrix[] ParseFuel(TStream s)
+		{
+			return ParseList<Matrix>(s, ParseMatrix);
+		}
+
+		private Matrix ParseMatrix(TStream s)
+		{
+			return new Matrix(ParseList(s, ss => ParseList<int>(ss, ParseNumber)));
+		}
+
 		public Chamber[] ParseChambers(TStream s)
 		{
 			Chamber[] chs = ParseList<Chamber>(s, ParseChamber);
@@ -86,7 +96,7 @@ namespace CircuitCalc.TParsing
 			return res;
 		}
 
-		private int ParseNumber(TStream s)
+		public int ParseNumber(TStream s)
 		{
 			var c = s.Next();
 			if(c == '0') return 0;
@@ -110,6 +120,34 @@ namespace CircuitCalc.TParsing
 		private int ParseDigit(TStream s)
 		{
 			return s.Next() - '0';
+		}
+	}
+
+	public class Matrix
+	{
+		public int height, width;
+		public readonly int[][] items;
+
+		public Matrix(int[][] items)
+		{
+			this.items = items;
+			height = items.Length;
+			if(height == 0) width = 0;
+			else width = items[0].Length;
+		}
+
+		public override string ToString()
+		{
+			var b = new StringBuilder();
+			for(int y=0; y<height; y++)
+			{
+				for(int x = 0; x < width; x++)
+				{
+					b.Append(" " + items[y][x]);
+				}
+				b.AppendLine();
+			}
+			return b.ToString();
 		}
 	}
 
