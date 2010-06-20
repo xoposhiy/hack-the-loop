@@ -9,17 +9,30 @@ namespace CircuitCalc.TParsing
 	[TestFixture]
 	public class TParser_Test
 	{
+		private TParser parser = new TParser();
+
+		[Test]
+		public void ParseStuff()
+		{
+			parser.ParseFuel(new TStream("1211222111")); 
+			foreach(var i in parser.ParseList<int>(new TStream("11021210112101221"), parser.ParseNumber))
+			{
+				Console.Write(i + " ");
+			}
+			Console.WriteLine();
+		}
+
 		[Test]
 		public void ParseCar()
 		{
-			Console.WriteLine(new TParser().ParseNumber(new TStream("22022")));
-			var chambers = new TParser().ParseChambers(new TStream("12200010112"));
+			var chambers = parser.ParseChambers(new TStream("122000010"));
 			foreach(var chamber in chambers) Console.WriteLine(chamber);
 		}
+
 		[Test]
 		public void ParseFuel()
 		{
-			var ms = new TParser().ParseFuel(new TStream("11110"));
+			var ms = new TParser().ParseFuel(new TStream("1211222111"));
 			foreach(var m in ms)
 			{
 				Console.WriteLine(m.ToString());

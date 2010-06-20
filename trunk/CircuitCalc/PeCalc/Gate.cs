@@ -5,7 +5,7 @@ using CircuitCalc.Input;
 
 namespace CircuitCalc.PeCalc
 {
-	class Gate
+	public class Gate
 	{
 		public Gate()
 		{
@@ -72,7 +72,7 @@ namespace CircuitCalc.PeCalc
 		}
 	}
 
-	class Calculator : ISink
+	public class Calculator : ISink
 	{
 		public Dictionary<int, Gate> gates = new Dictionary<int, Gate>();
 		public IList<BackWire> backwires = new List<BackWire>();
