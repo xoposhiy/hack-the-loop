@@ -13,7 +13,7 @@ namespace WebClient
 		[Test]
 		public void TestLogin()
 		{
-			var c = new CircuitCalc.WebClient.WebClient("7719F95218C5E4CDD1B064F80DB55937");
+			var c = new CircuitCalc.WebClient.IcfpcWebClient("7719F95218C5E4CDD1B064F80DB55937");
 			Console.WriteLine(c.GetCar("219"));
 			var cars = c.GetCarsList();
 			var sb = new StringBuilder();
@@ -29,7 +29,7 @@ namespace WebClient
 		public void TestCase()
 		{
 			IDictionary<string, string> spywork = Load("../../../spywork");
-			var client = new CircuitCalc.WebClient.WebClient("9DF6E16DBD869B8D83A8FEC9892F2273");
+			var client = new CircuitCalc.WebClient.IcfpcWebClient("9DF6E16DBD869B8D83A8FEC9892F2273");
 			foreach(var w in spywork)
 			{
 				Console.WriteLine(client.SubmitFuel(w.Key, w.Value));
