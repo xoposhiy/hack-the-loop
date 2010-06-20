@@ -22,21 +22,34 @@ namespace WebClient
 			return car;
 		}
 
-		public static string ParseSubmitFuelResponse(string response)
+		public static SubmitFuelResponse ParseSubmitFuelResponse(string response)
 		{
-			var match = ErrorTemplate.Match(response);
-			var error = match.Success ? match.Groups["Error"].Value : string.Empty;
-			if (string.IsNullOrEmpty(error))
-			{
-				match = SyntaxErrorTemplate.Match(response);
-				error = match.Success ? match.Groups["Error"].Value : string.Empty;
-			}
-			return error;
+			var result = new SubmitFuelResponse();
+			var match = SuccessTemplate.Match(response);
+			result.SuccessMessage = match.Success ? match.Groups["Message"].Value : string.Empty;
+			match = ErrorTemplate.Match(response);
+			result.ErrorMessage = match.Success ? match.Groups["Message"].Value : string.Empty;
+			match = SyntaxErrorTemplate.Match(response);
+			result.SyntaxErrorMessage = match.Success ? match.Groups["Message"].Value : string.Empty;
+			return result;
 		}
 
 		private static readonly Regex CarTemplate = new Regex(@"<label for=.*?>Car:</label>(?<Car>\d*?)</div>");
 		private static readonly Regex CarListItemTemplate = new Regex(@"<tr><td style=.*?>(?<CarId>\d*?)</td><td>(?<NumberOfFuels>\d*?)</td><td>.*?</td></tr>");
-		private static readonly Regex ErrorTemplate = new Regex(@"<span id=""solution.errors"" class=""errors"">(?<Error>.*?)</span>", RegexOptions.Singleline);
-		private static readonly Regex SyntaxErrorTemplate = new Regex(@"<pre>(?<Error>.*?)</pre><form id=""solution""", RegexOptions.Singleline);
+		private static readonly Regex ErrorTemplate = new Regex(@"<span id=""solution.errors"" class=""errors"">(?<Message>.*?)</span>", RegexOptions.Singleline);
+		private static readonly Regex SyntaxErrorTemplate = new Regex(@"<pre>(?<Message>.*?)</pre><form id=""solution""", RegexOptions.Singleline);
+		private static readonly Regex SuccessTemplate = new Regex(@"You have submitted fuel for car \d*? with size \d*?. A special comment for you:<pre>(?<Message>.*?)</pre>", RegexOptions.Singleline);
+	}
+
+	public struct SubmitFuelResponse
+	{
+		public string SuccessMessage;
+		public string ErrorMessage;
+		public string SyntaxErrorMessage;
+
+		public override string ToString()
+		{
+			return string.Format("{0}{1}{2}", SuccessMessage, ErrorMessage, SyntaxErrorMessage);
+		}
 	}
 }
