@@ -76,7 +76,7 @@ namespace CircuitCalc.TParsing
 			return res;
 		}
 
-		private T[] ParseList<T>(TStream s, Func<TStream, T> parse)
+		public T[] ParseList<T>(TStream s, Func<TStream, T> parse)
 		{
 			var c = s.Next();
 			if (c == '0') return new T[0];

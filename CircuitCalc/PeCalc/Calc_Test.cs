@@ -1,22 +1,52 @@
 ﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
 using System.IO;
+using System.Linq;
 
 namespace CircuitCalc.PeCalc
 {
+	public static class Consts
+	{
+		public const string keyPrefix =   "11021210112101221";
+		public const string serverInput = "0120210121020120210201";
+	}
+
+
 	[TestFixture]
 	public class Calc_Test
 	{
 		private const string twiceRealOut = "12211010022120012";
 		private const string keyPrefix = "11021210112101221";
-										  
+
+		[Test]
+		public void SubmitFuel1()
+		{
+			var lines = File.ReadAllLines(@"c:\work\icfpc2010\others\tbd\simulator\data\car_data_sorted");
+			foreach(var line in lines)
+			{
+				var parts = line.Split(',');
+				if (parts.Length > 1 && parts[1].Trim().StartsWith("1"))
+				{
+					Console.WriteLine(parts[0].Trim());
+					Process.Start("")
+				}
+			}
+		}
+
+		[Test]
+		public void T()
+		{
+			Console.WriteLine(new Calculator("tmp.txt")
+				.PushString(Consts.serverInput));
+		}
 
 		[Test]
 		public void TestCase()
 		{
 			var calculator = new Calculator("sample.txt");
 			const string sampleIn = "02222220210110011";
-			const string realIn = "02102202202202202";
+			const string realIn = "01202101210201202";
 			const string sampleRealOut = "10221220002011011";
 			string myOut = calculator.PushString(sampleIn);
 			Console.WriteLine();

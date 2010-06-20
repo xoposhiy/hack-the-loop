@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using CircuitCalc.CircuitBuilding;
+using CircuitCalc.PeCalc;
 
 namespace Editor
 {
@@ -20,15 +21,27 @@ namespace Editor
 		private void textBox1_TextChanged(object sender, EventArgs e)
 		{
 			string input = textBox1.Text;
-			textBox2.Text = BuildFactory(input);
+			var buildFactory = BuildFactory(input).Trim();
+			textBox2.Text = buildFactory;
+			var output = new Calculator(buildFactory.Split(new string[] {Environment.NewLine}, StringSplitOptions.None)).PushString(MakeInput(input));
+			Text = output;
 		}
 
-		private string BuildFactory(string input)
+		private string BuildFactory(string suffix)
 		{
-			var bytes = new Builder("01202101210201202" + new string('0', input.Length), "11021210112101221" + input).Build();
+			var bytes = new Builder(MakeInput(suffix), Consts.keyPrefix + suffix).Build();
 			var factory = new CircuitSerializer().Serialize(bytes);
 			Clipboard.SetText(factory);
 			return factory;
+		}
+
+		private string MakeInput(string input)
+		{
+			var part = Consts.serverInput;
+			var s = part;
+			while(s.Length <= part.Length + input.Length)
+				s += part;
+			return s;
 		}
 	}
 }
