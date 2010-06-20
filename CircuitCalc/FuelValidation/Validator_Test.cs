@@ -21,12 +21,12 @@ namespace CircuitCalc.FuelValidation
 		public void TestSimpleFuel()
 		{
 			int c = 0;
-			foreach(var carId in repo.carsByTanksCount[1])
+			foreach(var carId in repo.carsByTanksCount[2])
 			{
 				var car = repo.cars[carId];
 				try
 				{
-					if(v.FuelFitsCar(car, "11111"))
+					if(v.FuelFitsCar(car, "2202202201010220101022022010102201010"))
 					{
 						c++;
 						Console.WriteLine(carId);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using CircuitCalc;
 using CircuitCalc.CircuitBuilding;
 using CircuitCalc.PeCalc;
 
@@ -174,7 +175,7 @@ namespace Editor
 
 	    private void textBox3_TextChanged(object sender, EventArgs e)
         {
-            textBox1.Text = ParseMatrix(textBox3.Text);
+            textBox1.Text = ParseMatrix(textBox3.Text.Replace("\r", "").Replace("\n", "").Replace(" ", ""));
         }
 	}
 }
