@@ -59,11 +59,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CarCreator\Car.cs" />
+    <Compile Include="CarCreator\CarFactory.cs" />
     <Compile Include="CarCreator\Car_Tests.cs" />
+    <Compile Include="CarCreator\CreationTesting.cs" />
     <Compile Include="CarExtensions.cs" />
     <Compile Include="CarsGeneration\GenCars_Test.cs" />
     <Compile Include="CarsRepo.cs" />
-    <Compile Include="CarsSolving\SolveCars_Test.cs" />
+    <Compile Include="CircuitBuilding\CarsSolving\SolveCars_Test.cs" />
     <Compile Include="CircuitBuilding\Builder.cs" />
     <Compile Include="CircuitBuilding\Builder_Test.cs" />
     <Compile Include="CircuitBuilding\CircuitSerializer.cs" />

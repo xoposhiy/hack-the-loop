@@ -19,6 +19,8 @@ namespace CircuitCalc.CarCreator
 		/// </summary>
 		private readonly int numOfTanks;
 
+		private Matrix[] fuel;
+
 		public Car(Chamber[] chambers, int numOfTanks)
 		{
 			this.chambers = chambers;
