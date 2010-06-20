@@ -24,7 +24,7 @@ namespace CircuitCalc.CarCreator
 				foreach (var carString in rep.carsByTanksCount[i])
 				{
 					var car = new Car(rep.cars[carString], i);
-					Assert.True(car.IsConnected(), "Машинка не сцепленна...");
+					Assert.False(car.IsConnected(), "Машинка не сцепленна...");
 				}
 			}
 		}

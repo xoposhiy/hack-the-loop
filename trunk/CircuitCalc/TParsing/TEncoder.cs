@@ -25,6 +25,22 @@ namespace CircuitCalc.TParsing
 				matrix =>
 					EncodeList(matrix.items, row => EncodeList(row, EncodeNumber)));
 		}
+		public  string EncodeCar(Chamber[] car)
+		{
+			return EncodeList(car, EncodeChamber);
+		}
+		public string EncodeChamber(Chamber chmbr)
+		{
+			var res = EncodeList(chmbr.upper, EncodeNumber);
+			var master = 1;
+			if(chmbr.isMaster)
+			{
+				master = 0;
+			}
+			res += EncodeNumber(master);
+			res += EncodeList(chmbr.lower, EncodeNumber);
+			return res;
+		}
 
 		private string Conv3(int number, int pad)
 		{
