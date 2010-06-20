@@ -19,7 +19,6 @@ namespace CircuitCalc
 			{
 				var id = lines[i];
 				var encodedCar = lines[i + 1];
-				if(encodedCar == "0") continue;
 				cars.Add(id, parser.ParseCar(encodedCar));
 				encodedCars.Add(id, encodedCar);
 			}

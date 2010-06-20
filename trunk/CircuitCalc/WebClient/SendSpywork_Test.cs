@@ -11,9 +11,9 @@ namespace WebClient
 	{
 
 		[Test]
-		public void TestLogin()
+		public void GetCars()
 		{
-			var c = new CircuitCalc.WebClient.IcfpcWebClient("7719F95218C5E4CDD1B064F80DB55937");
+			var c = new CircuitCalc.WebClient.IcfpcWebClient("FE686CA522D1A6F6D9AA60EEAF5743AD");
 			Console.WriteLine(c.GetCar("219"));
 			var cars = c.GetCarsList();
 			var sb = new StringBuilder();
