@@ -72,7 +72,7 @@ namespace Editor
             return (number >= 0 && number < res.Length) ? res[number] : "<bad>";
         }
 
-        private string Conv3(int number)
+        private string Conv3(int number, int pad)
         {
             string result = "";
             while (number > 0)
@@ -80,7 +80,7 @@ namespace Editor
                 result = (number % 3) + result;
                 number /= 3;
             }
-            return result;
+            return result.PadLeft(pad, '0');
         }
 
 	    private string GetNumber(int number)
@@ -89,22 +89,22 @@ namespace Editor
             {
                 if (number <= 12)
                 {
-                    return "220" + Conv3(number - 4);
+                    return "220" + Conv3(number - 4, 2);
                 }
                 else if (number <= 39)
                 {
-                    return "2210" + Conv3(number - 13);
+                    return "2210" + Conv3(number - 13, 3);
                 }
                 else if (number <= 120)
                 {
-                    return "2211" + Conv3(number - 40);
+                    return "2211" + Conv3(number - 40, 4);
                 }
                 else if (number <= 363)
                 {
-                    return "2212" + Conv3(number - 121);
+                    return "2212" + Conv3(number - 121, 5);
                 }
                 else if (number <= 1092)
-                    return "2222000" + Conv3(number - 364);
+                    return "2222000" + Conv3(number - 364, 6);
                 else
                     return "<unimpl>";
             }
