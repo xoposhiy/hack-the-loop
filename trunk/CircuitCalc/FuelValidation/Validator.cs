@@ -22,10 +22,18 @@ namespace CircuitCalc.FuelValidation
 		
 		public bool FuelFitsCar(Chamber[] car, Matrix[] fuel)
 		{
-			var numberOfTanks = car.Length == 0 ? 0 : car.Max(ch => ch.TanksCount());
-			if (fuel.Length < numberOfTanks)
-				return false;
-			return car.All(chamber => ChamberWorks(chamber, fuel));
+			try
+			{
+				var numberOfTanks = car.Length == 0 ? 0 : car.Max(ch => ch.TanksCount());
+				if (fuel.Length < numberOfTanks)
+					return false;
+				return car.All(chamber => ChamberWorks(chamber, fuel));
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("error in validator, assume fuel is good");
+				return true;
+			}
 		}
 
 		private bool ChamberWorks(Chamber chamber, Matrix[] fuel)
@@ -69,10 +77,13 @@ namespace CircuitCalc.FuelValidation
 		private Matrix Mult(Matrix a, Matrix b)
 		{
 			var c = new Matrix(a.height, b.width);
-			for(int y = 0; y < c.height; y++)
-				for(int x = 0; x < c.width; x++)
-					for(int k = 0; k < a.width; k++)
-						c.items[y][x] += a.items[y][k]*b.items[k][x];
+			checked
+			{
+				for (int y = 0; y < c.height; y++)
+					for (int x = 0; x < c.width; x++)
+						for (int k = 0; k < a.width; k++)
+							c.items[y][x] += a.items[y][k] * b.items[k][x];
+			}
 			return c;
 		}
 

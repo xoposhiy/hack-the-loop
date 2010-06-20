@@ -31,20 +31,13 @@ namespace WebClientNS
 
 		private static void MainImpl(IcfpcWebClient client, string[] args)
 		{
-			//var error = client.SubmitFuel("2416", fuel);
-			//Console.WriteLine(error);
-
-			//GetCars(client);
-
 			var fuel = fuelSample;
 			if (args.Length > 1)
 				fuel = args[1];
 
-			//Console.WriteLine(factory);
-			//client.SubmitFuel("10220", factory);
-
 			var validator = new Validator();
 			var carIds = new CarsRepo("cars.txt").encodedCars.Where(kvp => validator.FuelFitsCar(kvp.Value, fuel)).Select(kvp => kvp.Key);
+			//var carIds = new CarsRepo("cars.txt").encodedCars.Where(kvp => true).Select(kvp => kvp.Key).Take(20);
 
 			SubmitFuelForEachCar(client, fuel, carIds);
 		}
