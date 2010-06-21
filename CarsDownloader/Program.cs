@@ -43,15 +43,15 @@ namespace CarsDownloader
 					repo = new CarsRepo(carsFile);
 					Console.WriteLine(repo.cars.Count);
 					Console.Write("Cars on server: ");
-					var carIdsList = client.GetCarIdsList();
+					var carIdsList = client.GetCarIdsList(20);
 					Console.WriteLine(carIdsList.Count());
 					foreach(var carId in carIdsList)
 					{
 						if(!repo.cars.ContainsKey(carId))
 						{
-							Console.Write("new car " + carId + ": len=");
+							Console.WriteLine("new car " + carId);
 							var car = client.GetCar(carId);
-							var tempCarsFile = "~" + carsFile;
+							var tempCarsFile = carsFile + "~";
 							if (File.Exists(carsFile))
 								File.Delete(tempCarsFile);
 							else
@@ -61,7 +61,6 @@ namespace CarsDownloader
 							File.Copy(carsFile, tempCarsFile);
 							File.AppendAllText(tempCarsFile, carId + Environment.NewLine + car + Environment.NewLine);
 							TryMove(tempCarsFile);
-							Console.WriteLine(car.Length);
 						}
 					}
 				}catch(Exception e)
