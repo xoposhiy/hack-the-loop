@@ -3,15 +3,25 @@ using System.IO;
 using System.Net;
 using System.Text;
 using CircuitCalc.CircuitBuilding;
+using CircuitCalc.WebClient;
 
 namespace CircuitCalc.PeCalc
 {
 	internal class ServerInputFinder
 	{
+		private readonly string sessionId;
+
+		public ServerInputFinder(string sessionId)
+		{
+			this.sessionId = sessionId;
+		}
+
 		public void Run()
 		{
-			var servInp = Consts.serverInput;
-			for(int i = 0; i < 100; i++)
+			var servInp = Consts.serverInput.Substring(0, Consts.serverInput.Length - 2);
+			var stepsSkipped = (servInp.Length - 17)/2;
+			Console.WriteLine("skip {0} steps", stepsSkipped);
+			for(int i = stepsSkipped; i < 300; i++)
 			{
 				var factories = new string[3,3];
 				bool[,] responses = FillTable(i, servInp, factories);
@@ -52,7 +62,7 @@ namespace CircuitCalc.PeCalc
 				for(char c2 = '0'; c2 <= '2'; c2++)
 				{
 					var factory = Builder.Build(servInp + "00", Consts.keyPrefix + new string('2', 2*i) + c1 + c2);
-					responses[c1 - '0', c2 - '0'] = Send(factory, i*2 + 2);
+					responses[c1 - '0', c2 - '0'] = Send2(factory, i*2 + 2);
 					factories[c1 - '0', c2 - '0'] = factory;
 					//throw new Exception("dobreak");
 				}
@@ -62,9 +72,21 @@ namespace CircuitCalc.PeCalc
 
 		private bool Send(string factory, int need2AtIndex)
 		{
+			var response = new IcfpcWebClient(sessionId).TestFactory(factory);
+			Console.WriteLine(response);
+			return 
+				response
+				.Contains(
+					string.Format("\"input\" (line 1, column {0}):", need2AtIndex)
+					);
+
+		}
+
+		private bool Send2(string factory, int need2AtIndex)
+		{
 			var webRequest = (HttpWebRequest)WebRequest.Create("http://icfpcontest.org/icfp10/instance/2416/solve");
 			webRequest.CookieContainer = new CookieContainer();
-			webRequest.CookieContainer.Add(new Cookie("JSESSIONID", "1D9490646CB45C19622BD671F2FCACED", "/icfp10", "icfpcontest.org"));
+			webRequest.CookieContainer.Add(new Cookie("JSESSIONID", sessionId, "/icfp10", "icfpcontest.org"));
 			webRequest.Method = "POST";
 			webRequest.ContentType = "application/x-www-form-urlencoded";
 			var s = webRequest.GetRequestStream();
@@ -77,7 +99,10 @@ namespace CircuitCalc.PeCalc
 			//Console.WriteLine(str);
 			responseStream.Close();
 			//if (str.Contains("not connected")) Console.WriteLine("NOT CONNECTED!!!");
-			return str.Contains(string.Format("\"input\" (line 1, column {0}):", need2AtIndex));
+			//Console.WriteLine(str);
+			var contains = str.Contains(string.Format("\"input\" (line 1, column {0}):", need2AtIndex));
+			if (contains) Console.WriteLine(".");
+			return contains;
 		}
 
 		private string Escape(string factory)

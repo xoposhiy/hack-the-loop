@@ -7,13 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FE1FEFA-3B7A-47A4-A909-E32020685098}"
 	ProjectSection(SolutionItems) = preProject
-		Cars.txt = Cars.txt
 		Numbers.txt = Numbers.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{F224C408-D478-4DBA-AFC7-10CDB8E3ED67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarsDownloader", "CarsDownloader\CarsDownloader.csproj", "{2D7FF77B-1FA9-4F0A-876F-A8A81D652C85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Submiter", "Submiter\Submiter.csproj", "{5C3D6978-0284-4690-924B-09D328868E3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +38,10 @@ Global
 		{2D7FF77B-1FA9-4F0A-876F-A8A81D652C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D7FF77B-1FA9-4F0A-876F-A8A81D652C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D7FF77B-1FA9-4F0A-876F-A8A81D652C85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3D6978-0284-4690-924B-09D328868E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3D6978-0284-4690-924B-09D328868E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3D6978-0284-4690-924B-09D328868E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3D6978-0284-4690-924B-09D328868E3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
