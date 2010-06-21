@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
-using System.Linq;
 
 namespace CircuitCalc.WebClient
 {
@@ -18,10 +18,20 @@ namespace CircuitCalc.WebClient
 
 		public IEnumerable<string> GetCarIdsList()
 		{
+			return GetCarIdsList(10000);
+		}
+
+		public IEnumerable<string> GetCarIdsList(int maxPages)
+		{
 			var carIds = new HashSet<string>();
-			for(int page=1; page<150; page++)
+			for(int page = 1; page < maxPages; page++)
 			{
 				var response = GetResponse(string.Format(getPagedCarsList, page));
+				if(response.Contains("No cars found."))
+				{
+					Console.WriteLine("pages: {0}", page - 1);
+					break;
+				}
 				foreach(var carId in HtmlParser.ParseCarsList(response))
 				{
 					carIds.Add(carId);
@@ -34,7 +44,7 @@ namespace CircuitCalc.WebClient
 		{
 			var carIds = GetCarIdsList();
 			var cars = new Dictionary<string, string>();
-			foreach (var carId in carIds)
+			foreach(var carId in carIds)
 			{
 				var car = GetCar(carId);
 				cars.Add(carId, car);
@@ -78,14 +88,13 @@ namespace CircuitCalc.WebClient
 			var req = CreateWebRequest(requestUri);
 			req.Method = "POST";
 			req.ContentType = "application/x-www-form-urlencoded";
-			using (var s = req.GetRequestStream())
+			using(var s = req.GetRequestStream())
 			{
 				var buffer = Encoding.ASCII.GetBytes(paramName + "=" + data);
 				s.Write(buffer, 0, buffer.Length);
 			}
-			using (var resp = req.GetResponse())
+			using(var resp = req.GetResponse())
 				return GetContent(resp.GetResponseStream());
-			
 		}
 
 		private static string Login()
@@ -93,12 +102,12 @@ namespace CircuitCalc.WebClient
 			var req = WebRequest.Create(login);
 			req.Method = "POST";
 			req.ContentType = "application/x-www-form-urlencoded";
-			using (var s = req.GetRequestStream())
+			using(var s = req.GetRequestStream())
 			{
 				var buffer = Encoding.ASCII.GetBytes(string.Format("j_username={0}&j_password={1}", user, pwd));
 				s.Write(buffer, 0, buffer.Length);
 			}
-			using (var resp = req.GetResponse())
+			using(var resp = req.GetResponse())
 			{
 				var cookie = resp.Headers["Set-Cookie"];
 				Debug.Assert(cookie.StartsWith("JSESSIONID="));
@@ -109,7 +118,7 @@ namespace CircuitCalc.WebClient
 		private string GetResponse(string requestUri)
 		{
 			var req = CreateWebRequest(requestUri);
-			using (var resp = req.GetResponse())
+			using(var resp = req.GetResponse())
 				return GetContent(resp.GetResponseStream());
 		}
 
@@ -122,7 +131,7 @@ namespace CircuitCalc.WebClient
 
 		private static string GetContent(Stream stream)
 		{
-			using (var sr = new StreamReader(stream, Encoding.UTF8))
+			using(var sr = new StreamReader(stream, Encoding.UTF8))
 				return sr.ReadToEnd();
 		}
 
