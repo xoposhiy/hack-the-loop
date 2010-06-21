@@ -13,20 +13,67 @@ namespace CircuitCalc.CarCreator
 
 	class Car
 	{
-		private readonly Chamber[] chambers;
+		private Chamber[] chambers;
 		/// <summary>
 		/// Количество баков от 0 до 6
 		/// </summary>
 		private readonly int numOfTanks;
 
 		private Matrix[] fuel;
+		private static readonly TEncoder encoder = new TEncoder();
+		private Comparison<Chamber> sortByChambers =
+			(a, b) => String.Compare(encoder.EncodeChamber(a), encoder.EncodeChamber(b));
+
+		private static int[][] permutations = new int[720][];
+		private static int[] next(int [] arr)
+		{
+			var res = (int[]) arr.Clone();
+			int i = arr.Length - 1;
+			for (i = arr.Length - 2; i >= 0 && res[i]>res[i+1]; i--) ;
+			if(i>=0)
+			{
+				var j = i + 1;
+				while (j < res.Length-1 && res[j+1] > res[j])
+				{
+					++j;
+				}
+				var tmp = res[i];
+				res[i] = res[j];
+				res[j] = tmp;
+
+				Array.Reverse(res,j+1, res.Length - j-1);
+ 			}
+			return res;
+		}
+		static Car() 
+		{
+			permutations[0] = new int[]{0,1,2,3,4,5};
+			for (var i = 1; i < permutations.Length; i++)
+			{
+				permutations[i] = next((int[])(permutations[i-1].Clone()));
+			}
+		}
 
 		public Car(Chamber[] chambers, int numOfTanks)
 		{
 			this.chambers = chambers;
 			this.numOfTanks = numOfTanks;
 		}
+		public Car(Chamber[] chambers, int numOfTanks, Matrix[] fuel)
+		{
+			this.chambers = chambers;
+			this.numOfTanks = numOfTanks;
+			this.fuel = fuel;
+		}
 
+		public Chamber[] GetChambers()
+		{
+			return chambers;
+		}
+		public Matrix[] GetFuel()
+		{
+			return fuel;
+		}
 		public bool IsConnected()
 		{
 			// Создаём пустую матрицу связности
@@ -83,6 +130,81 @@ namespace CircuitCalc.CarCreator
 			}
 
 			return true;
+		}
+		public void Normalize()
+		{
+			var best = DeepCopyChambers(chambers);
+
+			Array.Sort(best, sortByChambers);
+			for (int i = 1; i < 720; i++)
+			{
+				var next = DeepCopyChambers(chambers);
+				ApplyPermutation(next, permutations[i]);
+				Array.Sort(next, sortByChambers);
+				var bestCode = encoder.EncodeCar(best);
+				var nextCode = encoder.EncodeCar(next);
+				if (nextCode.Length < bestCode.Length)
+				{
+					best = next;
+					continue;
+				}
+				if(String.CompareOrdinal(bestCode, nextCode)>=0)
+				{
+					Console.WriteLine("b:" + bestCode);
+					Console.WriteLine("n:" + nextCode);
+					best = next;
+				}
+			}
+			chambers = best;
+		}
+
+		private Chamber[] DeepCopyChambers(Chamber[] from)
+		{
+			Chamber[] res = new Chamber[from.Length];
+			for (int i = 0; i < from.Length; i++)
+			{
+				res[i] = new Chamber();
+				res[i].isMaster = from[i].isMaster;
+				res[i].lower = new int[from[i].lower.Length];
+				res[i].upper = new int[from[i].upper.Length];
+
+				Array.Copy(from[i].lower, res[i].lower, from[i].lower.Length);
+				Array.Copy(from[i].upper, res[i].upper, from[i].upper.Length);
+			}
+			return res;
+		}
+		private void ApplyPermutation(Chamber[] chmbs, int[] permutation)
+		{
+			foreach (var chamber in chmbs)
+			{
+				for(int i = 0; i < chamber.lower.Length; ++i)
+				{
+					chamber.lower[i] = permutation[chamber.lower[i]];
+				}
+				for (int i = 0; i < chamber.upper.Length; ++i)
+				{
+					chamber.upper[i] = permutation[chamber.upper[i]];
+				}
+			}
+		}
+
+
+		public override string ToString()
+		{
+			var buld = new StringBuilder();
+			buld.Append("Chambers:\n");
+			foreach (var chamber in chambers)
+			{
+				buld.Append(chamber.ToString());
+				buld.Append("\n");
+			}
+			buld.Append("Fuel\n");
+			foreach (var matrix in fuel)
+			{
+				buld.Append(matrix.ToString());
+				buld.Append("\n");
+			}
+			return buld.ToString();
 		}
 
 	}

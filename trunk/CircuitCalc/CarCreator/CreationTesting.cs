@@ -49,13 +49,35 @@ namespace CircuitCalc.CarCreator
 			Console.WriteLine(car);
 
 		}
+		[Test]
+		public void CompareTest()
+		{
+//			Console.WriteLine(String.Compare("02", "1", StringComparison.Ordinal));
+			var bad = "2222000220010010220101201102201122001011122012220000112220220001101220002202200100122001";
+			var good = "2222000220022001010220102200001102201112011122012100112220220000012200022022001110122001";
+
+			Console.WriteLine(String.Compare(bad, good) >= 0);
+		}
 
 		[Test]
-		public void FactoryTestLong()
+		public void Factory()
 		{
-			BigInt a = new BigInt(0);
-			var f= new CarFactory();
-			f.GetCarLoopWithLenearStricts(1, 2, 3);
+			var fact = new CarFactory();
+			var car = fact.GetCarLoopWithLenearStricts(2, 3, 4, 6, 4);
+			//Console.WriteLine(car);
+
+			var enc = new TEncoder();
+			var parcer = new TParser();
+			var chmrs = car.GetChambers();
+//			Console.WriteLine(enc.EncodeCar(chmrs));
+			car.Normalize();
+//			Console.WriteLine(car.IsConnected());
+			chmrs = car.GetChambers();
+			var code = enc.EncodeCar(chmrs);
+			Console.WriteLine(code);
+			parcer.ParseCar(code);
+
+			Console.WriteLine(CircuitBuilding.Builder.BuildFactory(enc.EncodeFuel(car.GetFuel())));
 		}
 	}
 }
