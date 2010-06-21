@@ -79,5 +79,22 @@ namespace CircuitCalc.CarCreator
 
 			Console.WriteLine(CircuitBuilding.Builder.BuildFactory(enc.EncodeFuel(car.GetFuel())));
 		}
+
+		[Test]
+		public void SimpleTest()
+		{
+			var fact = new CarFactory();
+			var car = fact.GetCarSimple(10);
+
+
+			var enc = new TEncoder();
+			var parcer = new TParser();
+			car.Normalize();
+			var chmrs = car.GetChambers();
+			var code = enc.EncodeCar(chmrs);
+			Console.WriteLine(code);
+			Console.WriteLine(CircuitBuilding.Builder.BuildFactory(enc.EncodeFuel(car.GetFuel())));
+
+		}
 	}
 }
