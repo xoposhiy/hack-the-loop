@@ -143,7 +143,7 @@ namespace CircuitCalc.CarCreator
 			}
 			var best = DeepCopyChambers(chambers);
 			var origBest = DeepCopyChambers(best);
-			for (int i = 0; i < 10000; i++)
+			for (int i = 0; i < 1; i++)
 			{
 				var nextPer = new int[per2.Length];
 				Array.Copy(per2, nextPer, nextPer.Length);

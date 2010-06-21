@@ -104,5 +104,48 @@ namespace CircuitCalc.CarCreator
 				array[i] = element;
 			}
 		}
+				public Car GetCarSimple(int n)
+				{
+					var fuels = new Matrix[]
+			            	{
+			            		new Matrix(new[] {new int[] {2}}),
+								new Matrix(new[] {new int[] {2}}),
+								new Matrix(new[] {new int[] {2}}),
+								new Matrix(new[] {new int[] {2}}),
+								new Matrix(new[] {new int[] {2}}),
+								new Matrix(new[] {new int[] {2}}),
+			            	};
+					var chambers = new List<Chamber>();
+
+					// Кольцо. топливо подходит, если в двух баках подряд не единичные матрицы
+					chambers.Add(new Chamber() { isMaster = true, lower = new int[] {0}, upper = new int[] {0, 1}});
+					chambers.Add(new Chamber() { isMaster = true, lower = new int[] { 1 }, upper = new int[] { 1, 2 } });
+					chambers.Add(new Chamber() { isMaster = true, lower = new int[] { 2 }, upper = new int[] { 2, 3 } });
+					chambers.Add(new Chamber() { isMaster = true, lower = new int[] { 3 }, upper = new int[] { 3, 4 } });
+					chambers.Add(new Chamber() { isMaster = true, lower = new int[] { 4 }, upper = new int[] { 4, 5 } });
+					chambers.Add(new Chamber() { isMaster = true, lower = new int[] { 5 }, upper = new int[] { 5, 0 } });
+
+					foreach (var chamber in chambers)
+					{
+						var upper = new int[chamber.upper.Length + n];
+						Array.Copy(chamber.upper, upper, chamber.upper.Length);
+						for(int i = chamber.upper.Length; i < chamber.upper.Length + n; ++i)
+						{
+							upper[i] = 0;
+						}
+						var lower = new int[chamber.lower.Length + n];
+						Array.Copy(chamber.lower, lower, chamber.lower.Length);
+						for (int i = chamber.lower.Length; i < chamber.lower.Length + n; ++i)
+						{
+							lower[i] = 0;
+						}
+
+						chamber.upper = upper;
+						chamber.lower = lower;
+					}
+
+					return new Car(chambers.ToArray(), 6, fuels);
+				}
+
 	}
 }
