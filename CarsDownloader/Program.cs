@@ -51,7 +51,16 @@ namespace CarsDownloader
 						{
 							Console.Write("new car " + carId + ": len=");
 							var car = client.GetCar(carId);
-							File.AppendAllText(carsFile, carId + Environment.NewLine + car + Environment.NewLine);
+							var tempCarsFile = "~" + carsFile;
+							if (File.Exists(carsFile))
+								File.Delete(tempCarsFile);
+							else
+							{
+								throw new Exception("no cars file?!??!?!?! WTF?");
+							}
+							File.Copy(carsFile, tempCarsFile);
+							File.AppendAllText(tempCarsFile, carId + Environment.NewLine + car + Environment.NewLine);
+							TryMove(tempCarsFile);
 							Console.WriteLine(car.Length);
 						}
 					}
@@ -63,6 +72,24 @@ namespace CarsDownloader
 				Console.WriteLine("sleeeeeeep.....");
 				Thread.Sleep(10000);
 			}
+		}
+
+		private void TryMove(string tempCarsFile)
+		{
+			for(int i = 0; i < 10; i++ )
+				try
+				{
+					if (File.Exists(carsFile))
+						File.Delete(carsFile);
+					File.Move(tempCarsFile, carsFile);
+					return;
+				}
+				catch(Exception e)
+				{
+					Console.WriteLine("Cant move file: " + e.Message);
+					Thread.Sleep(100);
+				}
+			throw new Exception("Cant move file :(");
 		}
 	}
 }

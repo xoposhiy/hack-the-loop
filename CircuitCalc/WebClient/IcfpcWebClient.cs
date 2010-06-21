@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Linq;
 
 namespace CircuitCalc.WebClient
 {
@@ -16,9 +18,16 @@ namespace CircuitCalc.WebClient
 
 		public IEnumerable<string> GetCarIdsList()
 		{
-			var response = GetResponse(getCarsList);
-			var carIds = HtmlParser.ParseCarsList(response);
-			return carIds;
+			var carIds = new HashSet<string>();
+			for(int page=1; page<150; page++)
+			{
+				var response = GetResponse(string.Format(getPagedCarsList, page));
+				foreach(var carId in HtmlParser.ParseCarsList(response))
+				{
+					carIds.Add(carId);
+				}
+			}
+			return carIds.ToArray();
 		}
 
 		public Dictionary<string, string> GetCarsList()
@@ -49,6 +58,11 @@ namespace CircuitCalc.WebClient
 			return result;
 		}
 
+		public string TestFactory(string factory)
+		{
+			return Post(submitFuelFake, Escape(factory), "G1");
+		}
+
 		private static string Escape(string factory)
 		{
 			return factory.Replace("\r\n", "%0D%0A").Replace("#", "%23").Replace(",", "%2C").Replace(":", "%3A");
@@ -56,12 +70,17 @@ namespace CircuitCalc.WebClient
 
 		private string Post(string requestUri, string data)
 		{
+			return Post(requestUri, data, "contents");
+		}
+
+		private string Post(string requestUri, string data, string paramName)
+		{
 			var req = CreateWebRequest(requestUri);
 			req.Method = "POST";
 			req.ContentType = "application/x-www-form-urlencoded";
 			using (var s = req.GetRequestStream())
 			{
-				var buffer = Encoding.ASCII.GetBytes("contents=" + data);
+				var buffer = Encoding.ASCII.GetBytes(paramName + "=" + data);
 				s.Write(buffer, 0, buffer.Length);
 			}
 			using (var resp = req.GetResponse())
@@ -113,8 +132,10 @@ namespace CircuitCalc.WebClient
 		private const string root = @"http://icfpcontest.org/icfp10";
 		private const string login = @"http://icfpcontest.org/icfp10/login";
 		private const string getCarsList = @"http://icfpcontest.org/icfp10/score/instanceTeamCount";
+		private const string getPagedCarsList = @"http://icfpcontest.org/icfp10/score/instanceTeamCount?page={0}&size=10";
 		private const string submitCar = @"http://icfpcontest.org/icfp10/instance/form";
 		private const string getCar = @"http://icfpcontest.org/icfp10/instance/{0}/solve/form";
 		private const string submitFuel = @"http://icfpcontest.org/icfp10/instance/{0}/solve";
+		private const string submitFuelFake = @"http://nfa.imn.htwk-leipzig.de/icfpcont/?G0=0";
 	}
 }

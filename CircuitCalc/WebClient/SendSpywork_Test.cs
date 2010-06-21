@@ -29,10 +29,20 @@ namespace WebClient
 		public void TestCase()
 		{
 			IDictionary<string, string> spywork = Load("../../../spywork");
-			var client = new CircuitCalc.WebClient.IcfpcWebClient("9DF6E16DBD869B8D83A8FEC9892F2273");
+			var client = new CircuitCalc.WebClient.IcfpcWebClient("84FBCEB6D0FF510CB1B24A8364559653");
 			foreach(var w in spywork)
 			{
-				Console.WriteLine(client.SubmitFuel(w.Key, w.Value));
+				var submitFuelResponse = client.SubmitFuel(w.Key, w.Value);
+				if(!submitFuelResponse.FullResponse.Contains("already submitted"))
+				{
+					Console.Write(w.Key + " ");
+					if (submitFuelResponse.SuccessMessage.Contains("Good!")) Console.WriteLine("ok!");
+					else
+					{
+						Console.WriteLine();
+						Console.WriteLine(submitFuelResponse);
+					}
+				}
 			}
 		}
 

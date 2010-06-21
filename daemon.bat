@@ -1,1 +1,3 @@
-CarsDownloader\bin\Debug\CarsDownloader.exe Cars.txt FE686CA522D1A6F6D9AA60EEAF5743AD
+pushd CarsDownloader\bin\Debug\
+CarsDownloader.exe ../../../Data/Cars.txt 84FBCEB6D0FF510CB1B24A8364559653
+popd

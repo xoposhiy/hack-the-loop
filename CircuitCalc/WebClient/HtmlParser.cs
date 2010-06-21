@@ -25,6 +25,7 @@ namespace CircuitCalc.WebClient
 		public static SubmitFuelResponse ParseSubmitFuelResponse(string response)
 		{
 			var result = new SubmitFuelResponse();
+			result.FullResponse = response;
 			var match = SuccessTemplate.Match(response);
 			result.SuccessMessage = match.Success ? match.Groups["Message"].Value : string.Empty;
 			match = ErrorTemplate.Match(response);
@@ -46,6 +47,7 @@ namespace CircuitCalc.WebClient
 		public string SuccessMessage;
 		public string ErrorMessage;
 		public string SyntaxErrorMessage;
+		public string FullResponse;
 
 		public override string ToString()
 		{

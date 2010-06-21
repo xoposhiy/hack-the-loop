@@ -14,7 +14,7 @@ namespace CircuitCalc.TParsing
 		[Test]
 		public void ParseStuff()
 		{
-			var matrices = parser.ParseFuel(new TStream("2202202201010220101022022010102201010"));
+			var matrices = parser.ParseFuel(new TStream("22011121112"));
 			foreach(var m in matrices)
 			{
 				Console.Write(m.ToString());

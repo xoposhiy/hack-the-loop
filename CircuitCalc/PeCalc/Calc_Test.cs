@@ -10,7 +10,7 @@ namespace CircuitCalc.PeCalc
 		[Test]
 		public void ExtendServerInput1()
 		{
-			new ServerInputFinder().Run();
+			new ServerInputFinder("59F874D11F623AE51608DA377F3EF1E2").Run();
 		}
 
 		[Test]
