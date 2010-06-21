@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
+using Submiter;
+using System.Linq;
 
 namespace WebClient
 {
@@ -28,9 +30,12 @@ namespace WebClient
 		[Test]
 		public void TestCase()
 		{
-			IDictionary<string, string> spywork = Load("../../../spywork");
-			var client = new CircuitCalc.WebClient.IcfpcWebClient("84FBCEB6D0FF510CB1B24A8364559653");
-			foreach(var w in spywork)
+			var sols = new SolutionsRepo("../../../Data/SolvedCars.txt");
+			IDictionary<string, string> spywork = Load("../../../submitted_solutions.txt");
+			var client = new CircuitCalc.WebClient.IcfpcWebClient("AD07E392CFA0523F9F58A44FC19121FC");
+			var filtered = spywork.Where(w => !sols.solutions.ContainsKey(w.Key));
+			Console.WriteLine("count: " + filtered.Count());
+			foreach(var w in filtered)
 			{
 				var submitFuelResponse = client.SubmitFuel(w.Key, w.Value);
 				if(!submitFuelResponse.FullResponse.Contains("already submitted"))
@@ -52,10 +57,12 @@ namespace WebClient
 			var lines = File.ReadAllLines(spywork);
 			foreach(var line in lines)
 			{
+				if (line.Trim().StartsWith("#")) continue;
 				var delIndex = line.IndexOf(':');
+				if (delIndex < 0) continue;
 				var id = line.Substring(0, delIndex).Trim();
 				var quotedFactory = line.Substring(delIndex + 1).Trim();
-				var escapedFactory = quotedFactory.Substring(1, quotedFactory.Length - 3);
+				var escapedFactory = quotedFactory.Trim().TrimStart('\'').TrimEnd('\'',',');
 				var factory = escapedFactory.Replace("\\n", "\r\n");
 				res.Add(id, factory);
 			}

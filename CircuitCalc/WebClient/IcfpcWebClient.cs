@@ -104,7 +104,7 @@ namespace CircuitCalc.WebClient
 			req.ContentType = "application/x-www-form-urlencoded";
 			using(var s = req.GetRequestStream())
 			{
-				var buffer = Encoding.ASCII.GetBytes(string.Format("j_username={0}&j_password={1}", user, pwd));
+				var buffer = Encoding.ASCII.GetBytes(string.Format("j_username={0}&j_password={1}", "TODO", "TODO"));
 				s.Write(buffer, 0, buffer.Length);
 			}
 			using(var resp = req.GetResponse())
@@ -136,8 +136,6 @@ namespace CircuitCalc.WebClient
 		}
 
 		private readonly string sessionId;
-		private const string user = @"hack-the-loop";
-		private const string pwd = @"722750249482275797203643486818027156264822953884882105712868";
 		private const string root = @"http://icfpcontest.org/icfp10";
 		private const string login = @"http://icfpcontest.org/icfp10/login";
 		private const string getCarsList = @"http://icfpcontest.org/icfp10/score/instanceTeamCount";
