@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CircuitCalc.TParsing;
 using NUnit.Framework;
+using System.IO;
 using CarlJohansen;
 
 namespace CircuitCalc.CarCreator
@@ -95,6 +96,53 @@ namespace CircuitCalc.CarCreator
 			Console.WriteLine(code);
 			Console.WriteLine(CircuitBuilding.Builder.BuildFactory(enc.EncodeFuel(car.GetFuel())));
 
+		}
+		[Test]
+		public void SimpleToFile()
+		{
+			var fact = new CarFactory();
+			var enc = new TEncoder();
+
+			var x = System.IO.Directory.CreateDirectory("simpleCars");
+			for (int i = 11; i < 100; i++)
+			{
+				var f = File.AppendText("simpleCars/" + i + ".txt");
+				f.WriteLine();
+				var car = fact.GetCarSimple(i);
+
+				car.Normalize();
+				var chmrs = car.GetChambers();
+				var code = enc.EncodeCar(chmrs);
+				f.WriteLine(code);
+				//f.WriteLine(CircuitBuilding.Builder.BuildFactory(enc.EncodeFuel(car.GetFuel())));
+				f.Close();
+			}
+		}
+		[Test]
+		public void Fuel()
+		{
+			var fact = new CarFactory();
+			var enc = new TEncoder();
+			var car = fact.GetCarSimple(2);
+
+			Console.WriteLine(enc.EncodeFuel(car.GetFuel()));
+
+		}
+		[Test]
+		public void newFuel()
+		{
+			var fact = new CarFactory();
+			var enc = new TEncoder();
+			var car = fact.GetCarSimple(2);
+			var fuel = car.GetFuel();
+		//	fuel[0] = new Matrix(new int [][]{new int[] {3}});
+			fuel[1] = new Matrix(new int[][] { new int[] { 3 } });
+		//	fuel[2] = new Matrix(new int[][] { new int[] { 3 } });
+			fuel[3] = new Matrix(new int[][] {new int[] {3}});
+		//	fuel[5] = new Matrix(new int[][] { new int[] { 3 } });
+
+			Console.WriteLine(enc.EncodeFuel(fuel));
+			Console.WriteLine(CircuitBuilding.Builder.BuildFactory(enc.EncodeFuel(fuel)));
 		}
 	}
 }
