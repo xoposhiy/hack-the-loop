@@ -133,14 +133,59 @@ namespace CircuitCalc.CarCreator
 		}
 		public void Normalize()
 		{
-			var best = DeepCopyChambers(chambers);
 
-			Array.Sort(best, sortByChambers);
+			// попробуем ещё по пребирать перестановки Чамберов
+			// Инициализируем тождественную
+			var per2 = new int[chambers.Length];
+			for (int i = 0; i < per2.Length; i++)
+			{
+				per2[i] = i;
+			}
+			var best = DeepCopyChambers(chambers);
+			var origBest = DeepCopyChambers(best);
+			for (int i = 0; i < 10000; i++)
+			{
+				var nextPer = new int[per2.Length];
+				Array.Copy(per2, nextPer, nextPer.Length);
+				nextPer = next(nextPer);
+				var nextChmp = new Chamber[origBest.Length];
+				var tmp = DeepCopyChambers(origBest);
+				for (int j = 0; j < origBest.Length; j++)
+				{
+					nextChmp[j] = tmp[nextPer[j]];
+				}
+				nextChmp = OptimizeByTanks(nextChmp);
+				var bestCode = encoder.EncodeCar(best);
+				var nextCode = encoder.EncodeCar(nextChmp);
+				if (nextCode.Length < bestCode.Length)
+				{
+					best = nextChmp;
+					continue;
+				}
+				if (nextCode.Length > bestCode.Length)
+				{
+					continue;
+				}
+				if (String.CompareOrdinal(bestCode, nextCode) > 0)
+				{
+					Console.WriteLine("b!:" + bestCode);
+					Console.WriteLine("n!:" + nextCode);
+					best = nextChmp;
+				}
+
+			}
+
+			chambers = best;
+		}
+
+		public Chamber[] OptimizeByTanks(Chamber[] orig)
+		{
+			var best = DeepCopyChambers(orig);
+
 			for (int i = 1; i < 720; i++)
 			{
-				var next = DeepCopyChambers(chambers);
+				var next = DeepCopyChambers(orig);
 				ApplyPermutation(next, permutations[i]);
-				Array.Sort(next, sortByChambers);
 				var bestCode = encoder.EncodeCar(best);
 				var nextCode = encoder.EncodeCar(next);
 				if (nextCode.Length < bestCode.Length)
@@ -148,14 +193,18 @@ namespace CircuitCalc.CarCreator
 					best = next;
 					continue;
 				}
-				if(String.CompareOrdinal(bestCode, nextCode)>=0)
+				if (nextCode.Length > bestCode.Length)
+				{
+					continue;
+				}
+				if (String.CompareOrdinal(bestCode, nextCode) > 0)
 				{
 					Console.WriteLine("b:" + bestCode);
 					Console.WriteLine("n:" + nextCode);
 					best = next;
 				}
 			}
-			chambers = best;
+			return best;
 		}
 
 		private Chamber[] DeepCopyChambers(Chamber[] from)
