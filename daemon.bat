@@ -1,3 +1,3 @@
 pushd CarsDownloader\bin\Debug\
-CarsDownloader.exe ../../../Data/Cars.txt AD07E392CFA0523F9F58A44FC19121FC
+CarsDownloader.exe ../../../Data/Cars.txt 88BE9F55CB16C44769FE7E99D90F9821
 popd

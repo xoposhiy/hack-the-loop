@@ -78,7 +78,6 @@
     <Compile Include="Parsing\Parser_Test.cs" />
     <Compile Include="PeCalc\Calc_Test.cs" />
     <Compile Include="PeCalc\Gate.cs" />
-    <Compile Include="PeCalc\ServerInputFinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolutionsRepo.cs" />

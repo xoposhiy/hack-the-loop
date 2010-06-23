@@ -36,7 +36,7 @@ namespace CircuitCalc.WebClient
 		}
 
 		private static readonly Regex CarTemplate = new Regex(@"<label for=.*?>Car:</label>(?<Car>\d*?)</div>");
-		private static readonly Regex CarListItemTemplate = new Regex(@"<tr><td style=.*?>(?<CarId>\d*?)</td><td>(?<NumberOfFuels>\d*?)</td><td>.*?</td></tr>");
+		private static readonly Regex CarListItemTemplate = new Regex(@"<tr><td style=.*?>(?<CarId>\d*?)</td>.*?</tr>");
 		private static readonly Regex ErrorTemplate = new Regex(@"<span id=""solution.errors"" class=""errors"">(?<Message>.*?)</span>", RegexOptions.Singleline);
 		private static readonly Regex SyntaxErrorTemplate = new Regex(@"<pre>(?<Message>.*?)</pre><form id=""solution""", RegexOptions.Singleline);
 		private static readonly Regex SuccessTemplate = new Regex(@"You have submitted fuel for car \d*? with size .*?<pre>(?<Message>.*?)</pre>", RegexOptions.Singleline);

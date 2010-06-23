@@ -26,7 +26,11 @@ namespace CircuitCalc.CircuitBuilding
 			o_t0 = new byte[n];
 			o_kt = new byte[n,n];
 			for(int t=0; t<n; t++)
-				o_kt[0, t] = GetRightInput(Char2Byte(input[t]), Char2Byte(wantedOutput[t]));
+			{
+				var leftOut = Char2Byte(wantedOutput[t]);
+				var leftIn = Char2Byte(input[t]);
+				o_kt[0, t] = GetRightInput(leftIn, leftOut);
+			}
 			o_t0[0] = o_kt[0, 0];
 		}
 
