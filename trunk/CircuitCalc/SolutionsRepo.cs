@@ -17,6 +17,7 @@ namespace Submiter
 			foreach(var line in lines)
 			{
 				var parts = line.Split(new[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+				if (parts.Length < 2) continue;
 				var carId = parts[0];
 				var fuel =  parts[1];
 				solutions.Add(carId, fuel);
@@ -26,9 +27,9 @@ namespace Submiter
 		public void AddSolution(string carId, string fuel)
 		{
 			if(solutions.ContainsKey(carId)) return;
-			File.AppendAllText(solvedCarsFile, carId + ' ' + fuel + Environment.NewLine);
+			File.AppendAllText(solvedCarsFile, carId + ' ' + fuel.Trim() + Environment.NewLine);
 			solutions.Add(carId, fuel);
-			Console.WriteLine("Solved {0} : fuel len = {1}", carId, fuel);
+			Console.WriteLine("   #### Solved {0} : fuel len = {1} ####", carId, fuel.Length);
 		}
 	}
 }

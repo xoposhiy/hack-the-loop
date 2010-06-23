@@ -43,7 +43,7 @@ namespace CarsDownloader
 					repo = new CarsRepo(carsFile);
 					Console.WriteLine(repo.cars.Count);
 					Console.Write("Cars on server: ");
-					var carIdsList = client.GetCarIdsList(20);
+					var carIdsList = client.GetCarIdsList(50);
 					Console.WriteLine(carIdsList.Count());
 					foreach(var carId in carIdsList)
 					{

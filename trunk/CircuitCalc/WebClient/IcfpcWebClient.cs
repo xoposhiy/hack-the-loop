@@ -10,10 +10,50 @@ namespace CircuitCalc.WebClient
 {
 	public class IcfpcWebClient
 	{
+		public static string HttpPost(string uri, string parameters)
+		{
+			WebRequest webRequest = WebRequest.Create(uri);
+			webRequest.ContentType = "application/x-www-form-urlencoded";
+			webRequest.Method = "POST";
+			byte[] bytes = Encoding.ASCII.GetBytes(parameters);
+			Stream os = null;
+			try
+			{ // send the Post
+				webRequest.ContentLength = bytes.Length;   //Count bytes to send
+				os = webRequest.GetRequestStream();
+				os.Write(bytes, 0, bytes.Length);         //Send it
+			}
+			catch (WebException ex)
+			{
+				Console.WriteLine(ex.Message, "HttpPost: Request error");
+			}
+			finally
+			{
+				if (os != null)
+				{
+					os.Close();
+				}
+			}
+
+			try
+			{ // get the response
+				WebResponse webResponse = webRequest.GetResponse();
+				if (webResponse == null)
+				{ return null; }
+				StreamReader sr = new StreamReader(webResponse.GetResponseStream());
+				return sr.ReadToEnd().Trim();
+			}
+			catch (WebException ex)
+			{
+				Console.WriteLine(ex.Message, "HttpPost: Response error");
+			}
+			return HttpPost(uri, parameters);
+		} // end HttpPost 
+
 		//TODO: login почему-то не фурычит
 		public IcfpcWebClient(string sessionId)
 		{
-			this.sessionId = string.IsNullOrEmpty(sessionId) ? Login() : sessionId;
+			this.sessionId = string.IsNullOrEmpty(sessionId.Trim()) ? Login() : sessionId;
 		}
 
 		public IEnumerable<string> GetCarIdsList()
@@ -62,10 +102,17 @@ namespace CircuitCalc.WebClient
 
 		public SubmitFuelResponse SubmitFuel(string carId, string factory)
 		{
-			var response = Post(string.Format(submitFuel, carId), Escape(factory));
-			File.WriteAllText(string.Format("submit-fuel-for-car-{0}.html", carId), response);
-			var result = HtmlParser.ParseSubmitFuelResponse(response);
-			return result;
+			try
+			{
+				var response = Post(string.Format(submitFuel, carId), Escape(factory));
+				File.WriteAllText(string.Format("submit-fuel-for-car-{0}.html", carId), response);
+				var result = HtmlParser.ParseSubmitFuelResponse(response);
+				return result;
+			}
+			catch(Exception e)
+			{
+				return new SubmitFuelResponse {SyntaxErrorMessage = e.Message, FullResponse = e.ToString(), ErrorMessage = "", SuccessMessage = ""};
+			}
 		}
 
 		public string TestFactory(string factory)
@@ -99,20 +146,11 @@ namespace CircuitCalc.WebClient
 
 		private static string Login()
 		{
-			var req = WebRequest.Create(login);
-			req.Method = "POST";
-			req.ContentType = "application/x-www-form-urlencoded";
-			using(var s = req.GetRequestStream())
-			{
-				var buffer = Encoding.ASCII.GetBytes(string.Format("j_username={0}&j_password={1}", "TODO", "TODO"));
-				s.Write(buffer, 0, buffer.Length);
-			}
-			using(var resp = req.GetResponse())
-			{
-				var cookie = resp.Headers["Set-Cookie"];
-				Debug.Assert(cookie.StartsWith("JSESSIONID="));
-				return cookie.Split(new[] {';'})[0].Split(new[] {'='})[1];
-			}
+			var s1 = HttpPost("http://icfpcontest.org/icfp10/static/j_spring_security_check", "j_username=hack_the_loop&j_password=722750249482275797203643486818027156264822953884882105712868");
+			var pos1 = s1.IndexOf(";jsessionid=") + ";jsessionid=".Length;
+			var pos2 = s1.IndexOf("\"", pos1);
+			var sessionId = s1.Substring(pos1, pos2 - pos1);
+			return sessionId;
 		}
 
 		private string GetResponse(string requestUri)
